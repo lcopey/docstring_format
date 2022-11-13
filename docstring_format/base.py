@@ -1,6 +1,7 @@
 import ast
 import re
 from dataclasses import dataclass
+from typing import Optional
 from .annotations import parse_annotation
 from .constants import DocstringStyle, DOCSTRING_DELIMITER
 
@@ -51,29 +52,41 @@ def get_docstring_lines(func: ast.FunctionDef, lines: list[str]) -> tuple[int, i
     return start, length
 
 
-def get_docstring_sections(docstring, style: DocstringStyle = DocstringStyle.NUMPY) -> DocstringSection:
+def get_docstring(func: ast.FunctionDef, lines: list[str]) -> str:
+    start, length = get_docstring_lines(func, lines)
+    docstring = '\n'.join(lines[start:start + length])
+    return docstring
+
+
+def get_docstring_sections(docstring, style: DocstringStyle = DocstringStyle.NUMPY) -> Optional[DocstringSection]:
     delimiter_token = DOCSTRING_DELIMITER[style]
     sections_regex = re.compile(f'(?P<summary>.*)(?P<delimiter>{delimiter_token})(?P<parameters>.*)', flags=re.S)
-    result = re.search(sections_regex, docstring).groupdict()
-    return DocstringSection(**result)
+    match = re.search(sections_regex, docstring)
+    if match:
+        return DocstringSection(**match.groupdict())
 
 
 def annotate_function(func: ast.FunctionDef, dirty_lines: list[str]) -> str:
-    start, length = get_docstring_lines(func, dirty_lines)
-    docstring = '\n'.join(dirty_lines[start:start + length])
-
+    docstring = get_docstring(func, dirty_lines)
     sections = get_docstring_sections(docstring)
 
-    for item in func.args.args:
-        arg_name = item.arg
-        annotation = parse_annotation(item)
-        arg_regex = re.compile(f'(?P<arg>{arg_name}).*(?P<annotation>{annotation})?.*:?.*\n')
+    if sections:
+        # TODO make it impossible to annotate twice the same arg ? with as stack mechanism ?
+        for item in func.args.args:
+            arg_name = item.arg
+            annotation = parse_annotation(item)
+            if annotation:
+                arg_regex = re.compile(f'(?P<arg>{arg_name}).*(?P<annotation>{annotation})?.*:?.*\n')
 
-        match = re.search(arg_regex, sections.parameters)
-        if match:
-            match = match.groupdict()
-            if match['arg'] is not None and match['annotation'] is None:
-                sections.parameters = re.sub(f'{arg_name}.*:?', f'{item.arg} ({annotation}):', sections.parameters)
+                match = re.search(arg_regex, sections.parameters)
+                if match:
+                    match = match.groupdict()
+                    if match['arg'] is not None and match['annotation'] is None:
+                        sections.parameters = re.sub(f'{arg_name}.*?:?',
+                                                     f'{item.arg} ({annotation}):',
+                                                     sections.parameters,
+                                                     1)
 
-    corrected_docstring = sections.to_string()
-    return corrected_docstring
+            corrected_docstring = sections.to_string()
+            return corrected_docstring
+    return docstring

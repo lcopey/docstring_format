@@ -1,4 +1,5 @@
 import ast
+from typing import Optional
 
 
 def eval_str(node) -> str:
@@ -34,8 +35,9 @@ def eval_subscript(node) -> str:
     return f'{eval_node(node.value)}[{eval_node(node.slice)}]'
 
 
-def parse_annotation(item: ast.arg):
-    return eval_node(item.annotation)
+def parse_annotation(item: ast.arg) -> Optional[str]:
+    if hasattr(item, 'annotation'):
+        return eval_node(item.annotation)
 
 
 EVAL_MAP = {ast.Name: eval_name,

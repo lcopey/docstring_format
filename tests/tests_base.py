@@ -2,7 +2,7 @@ from unittest import TestCase
 import json
 import ast
 from pathlib import Path
-from docstring_format.base import get_docstring_lines, get_docstring_sections, annotate_function
+from docstring_format.base import get_docstring_lines, get_docstring, get_docstring_sections, annotate_function
 
 
 class TestBase(TestCase):
@@ -19,19 +19,20 @@ class TestBase(TestCase):
         for func in self.functions:
             result = self.results[func.name]  # may fail if json file is not up to date
             start, length = get_docstring_lines(func, self.dirty_lines)
-            assert start == result['start'] and length == result['length']
+            self.assertEqual(start, result['start'])
+            self.assertEqual(length, result['length'])
 
     def test_docstring_section(self):
         for func in self.functions:
             result = self.results[func.name]
-            start, length = get_docstring_lines(func, self.dirty_lines)
-            docstring = '\n'.join(self.dirty_lines[start:start + length])
+            docstring = get_docstring(func, self.dirty_lines)
             sections = get_docstring_sections(docstring)
-            assert result['sections'] == sections.to_dict()
+            self.assertEqual(result['sections'], sections.to_dict())
 
     def test_annotate_function(self):
         for func in self.functions:
+            print(func.name)
             result = self.results[func.name]
             docstring = annotate_function(func, self.dirty_lines)
 
-            assert result['docstring'] == docstring
+            self.assertEqual(result['docstring'], docstring)
