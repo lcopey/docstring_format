@@ -7,18 +7,31 @@ from .constants import DocstringStyle, DOCSTRING_DELIMITER
 
 @dataclass
 class DocstringSection:
+    """Base structure describing a docstring"""
     summary: str
     delimiter: str
     parameters: str
 
-    def values(self):
+    def values(self) -> tuple[str, str, str]:
+        """Returns attributes as tuple"""
         return self.summary, self.delimiter, self.parameters
 
-    def to_string(self):
+    @staticmethod
+    def keys() -> tuple[str, str, str]:
+        """Returns attributes as key"""
+        return 'summary', 'delimiter', 'parameters'
+
+    def to_string(self) -> str:
+        """Returns the docstring as string"""
         return ''.join(self.values())
+
+    def to_dict(self):
+        """Returns the docstring as dictionary"""
+        return dict(zip(self.keys(), self.values()))
 
 
 def get_docstring_lines(func: ast.FunctionDef, lines: list[str]) -> tuple[int, int]:
+    """Get the start and the length of the docstring associated with func."""
     docstring = ast.get_docstring(func)
     tag_search = re.compile('["\']{3}')
 
