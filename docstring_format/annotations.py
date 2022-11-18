@@ -36,7 +36,7 @@ def eval_subscript(node) -> str:
 
 
 def parse_annotation(item: ast.arg) -> Optional[str]:
-    if hasattr(item, 'annotation'):
+    if hasattr(item, 'annotation') and item.annotation:
         return eval_node(item.annotation)
 
 

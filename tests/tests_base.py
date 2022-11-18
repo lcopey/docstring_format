@@ -5,9 +5,9 @@ from pathlib import Path
 from docstring_format.base import get_docstring_lines, get_docstring, get_docstring_sections, annotate_function
 
 
-class TestBase(TestCase):
+class TestFunctions(TestCase):
     def setUp(self) -> None:
-        with open('./dummy_results.json', mode='r') as f:
+        with open('./dummy_test_functions_results.json', mode='r') as f:
             self.results = json.load(f)
         file = Path('./dummy_tests_functions.py')
         raw_text = file.read_text()

@@ -53,40 +53,74 @@ def get_docstring_lines(func: ast.FunctionDef, lines: list[str]) -> tuple[int, i
 
 
 def get_docstring(func: ast.FunctionDef, lines: list[str]) -> str:
+    """Get docstring from function and lines read from the file."""
     start, length = get_docstring_lines(func, lines)
-    docstring = '\n'.join(lines[start:start + length])
+    docstring = get_docstring_from_position(lines, start, length)
     return docstring
 
 
+def get_docstring_from_position(lines: list[str], start: int, length: int) -> str:
+    """Get the docstring as string from the list of lines read in the file."""
+    return '\n'.join(lines[start:start + length])
+
+
 def get_docstring_sections(docstring, style: DocstringStyle = DocstringStyle.NUMPY) -> Optional[DocstringSection]:
+    """Parse the docstring to get sections.
+
+    Sections are defined as :
+     - summary (everything until the parameters definition).
+     - a parameter delimiter (depending of the writing style of the docstring)
+     - the parameters"""
     delimiter_token = DOCSTRING_DELIMITER[style]
-    sections_regex = re.compile(f'(?P<summary>.*)(?P<delimiter>{delimiter_token})(?P<parameters>.*)', flags=re.S)
-    match = re.search(sections_regex, docstring)
+    pattern = re.compile(f'(?P<summary>.*)(?P<delimiter>{delimiter_token})(?P<parameters>.*)', flags=re.S)
+    match = re.search(pattern, docstring)
     if match:
         return DocstringSection(**match.groupdict())
 
 
-def annotate_function(func: ast.FunctionDef, dirty_lines: list[str]) -> str:
-    docstring = get_docstring(func, dirty_lines)
+def correct_lines(dirty_lines: list[str], start: int, length: int, corrected_docstring) -> list[str]:
+    """Apply corrected docstring in the lines read from the file."""
+    corrected_lines = dirty_lines.copy()
+    [corrected_lines.pop(start) for _ in range(length)]
+    [corrected_lines.insert(start, line) for line in corrected_docstring.splitlines()[::-1]]
+
+    return corrected_lines
+
+
+def annotate_args(func: ast.FunctionDef,
+                  lines: list[str],
+                  sections: DocstringSection,
+                  start: int,
+                  length: int) -> list[str]:
+    """Annotate arguments from a function definition"""
+    for item in func.args.args:
+        arg_name = item.arg
+        annotation = parse_annotation(item)
+
+        if annotation:
+            pattern = re.compile(f"{arg_name}.*:")
+            match = re.search(pattern, sections.parameters)
+
+            if match:
+                corrected = f'{item.arg} ({annotation}):'
+                sections.parameters = re.sub(match.group(), corrected, sections.parameters, 1)
+
+        corrected_docstring = sections.to_string()
+        lines = correct_lines(lines, start, length, corrected_docstring)
+    return lines
+
+
+def annotate_function(func: ast.FunctionDef, lines: list[str]) -> list[str]:
+    """Annotate function"""
+    start, length = get_docstring_lines(func, lines)
+    docstring = get_docstring_from_position(lines, start, length)
     sections = get_docstring_sections(docstring)
 
     if sections:
-        # TODO make it impossible to annotate twice the same arg ? with as stack mechanism ?
-        for item in func.args.args:
-            arg_name = item.arg
-            annotation = parse_annotation(item)
-            if annotation:
-                arg_regex = re.compile(f'(?P<arg>{arg_name}).*(?P<annotation>{annotation})?.*:?.*\n')
+        lines = annotate_args(func, lines, sections, start, length)
 
-                match = re.search(arg_regex, sections.parameters)
-                if match:
-                    match = match.groupdict()
-                    if match['arg'] is not None and match['annotation'] is None:
-                        sections.parameters = re.sub(f'{arg_name}.*?:?',
-                                                     f'{item.arg} ({annotation}):',
-                                                     sections.parameters,
-                                                     1)
+    return lines
 
-            corrected_docstring = sections.to_string()
-            return corrected_docstring
-    return docstring
+
+def annotate_file():
+    raise NotImplementedError
