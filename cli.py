@@ -1,9 +1,11 @@
-from pathlib import Path
 import ast
 import json
+from pathlib import Path
+
 from typer import Typer
 
-from docstring_format.base import get_docstring_lines, get_docstring_sections, annotate_function
+from docstring_format.base import (annotate_function, get_docstring_lines,
+                                   get_docstring_sections)
 
 app = Typer()
 

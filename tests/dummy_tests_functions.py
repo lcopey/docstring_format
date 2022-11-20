@@ -75,3 +75,23 @@ def delta(
     # ref_values = _get_ref_values(values, ref_id)
     # return values - ref_values
     pass
+
+
+def delta_w_returns(
+        values: "Union[pd.DataFrame, pd.Series]", ref_id
+) -> "Union[pd.DataFrame, pd.Series]":
+    """Compute the difference of values with respect to ref_id.
+
+    Parameters
+    ----------
+    values: values to compute from
+    ref_id: delta values are computed with respect to that reference. It should be valid index or a list of valid
+     index from values.
+
+    Returns
+    -------
+
+    """
+    # ref_values = _get_ref_values(values, ref_id)
+    # return values - ref_values
+    pass

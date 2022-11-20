@@ -1,26 +1,30 @@
 import ast
 import re
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Optional
+
 from .annotations import parse_annotation
-from .constants import DocstringStyle, DOCSTRING_DELIMITER
+from .constants import PARAMETERS_DELIMITERS_REGEX, RETURNS_DELIMITERS_REGEX, DocstringStyle
 
 
 @dataclass
 class DocstringSection:
     """Base structure describing a docstring"""
     summary: str
-    delimiter: str
+    param_delimiter: str
     parameters: str
+    return_delimiter: str
+    returns: str
 
-    def values(self) -> tuple[str, str, str]:
+    def values(self) -> tuple[str, str, str, str, str]:
         """Returns attributes as tuple"""
-        return self.summary, self.delimiter, self.parameters
+        return self.summary, self.param_delimiter, self.parameters, self.return_delimiter, self.returns
 
     @staticmethod
-    def keys() -> tuple[str, str, str]:
+    def keys() -> tuple[str, str, str, str, str]:
         """Returns attributes as key"""
-        return 'summary', 'delimiter', 'parameters'
+        return 'summary', 'param_delimiter', 'parameters', 'return_delimiter', 'returns'
 
     def to_string(self) -> str:
         """Returns the docstring as string"""
@@ -69,10 +73,16 @@ def get_docstring_sections(docstring, style: DocstringStyle = DocstringStyle.NUM
 
     Sections are defined as :
      - summary (everything until the parameters definition).
-     - a parameter delimiter (depending of the writing style of the docstring)
+     - a parameter param_delimiter (depending of the writing style of the docstring)
      - the parameters"""
-    delimiter_token = DOCSTRING_DELIMITER[style]
-    pattern = re.compile(f'(?P<summary>.*)(?P<delimiter>{delimiter_token})(?P<parameters>.*)', flags=re.S)
+    param_token = PARAMETERS_DELIMITERS_REGEX[style]
+    return_token = RETURNS_DELIMITERS_REGEX[style]
+    pattern = re.compile('(?P<summary_text>.*)'
+                         f'(?P<param_delimiter>{param_token})'
+                         f'(?P<parameters_text>((?!{return_token}).)*)'  # negative lookahead of return token
+                         f'(?P<return_delimiter>{return_token})?'
+                         f'(?P<returns_text>.*)?',
+                         flags=re.S)
     match = re.search(pattern, docstring)
     if match:
         return DocstringSection(**match.groupdict())
@@ -110,6 +120,14 @@ def annotate_args(func: ast.FunctionDef,
     return lines
 
 
+def annotate_returns(func: ast.FunctionDef,
+                     lines: list[str],
+                     sections: DocstringSection,
+                     start: int,
+                     length: int) -> list[str]:
+    raise NotImplementedError
+
+
 def annotate_function(func: ast.FunctionDef, lines: list[str]) -> list[str]:
     """Annotate function"""
     start, length = get_docstring_lines(func, lines)
@@ -122,5 +140,13 @@ def annotate_function(func: ast.FunctionDef, lines: list[str]) -> list[str]:
     return lines
 
 
-def annotate_file():
+def annotate_file(file_path: str):
+    file = Path(file_path)
+    raw_text = file.read_text()
+    dirty_lines = raw_text.splitlines()
+    parsed_file = ast.parse(raw_text)
+
+    classes = [item for item in parsed_file.body if isinstance(item, ast.ClassDef)]
+    class_methods = [func for item in classes for func in item.body if isinstance(func, ast.FunctionDef)]
+    functions = [item for item in parsed_file.body if isinstance(item, ast.FunctionDef)]
     raise NotImplementedError

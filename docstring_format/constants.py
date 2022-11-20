@@ -7,4 +7,5 @@ class DocstringStyle(Enum):
     GOOGLE = auto()
 
 
-DOCSTRING_DELIMITER = {DocstringStyle.NUMPY: 'Parameters\n\s*-+\n'}
+PARAMETERS_DELIMITERS_REGEX = {DocstringStyle.NUMPY: 'Parameters\n\s*-+\n'}
+RETURNS_DELIMITERS_REGEX = {DocstringStyle.NUMPY: 'Returns\s*-+\n'}
