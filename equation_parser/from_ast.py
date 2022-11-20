@@ -31,7 +31,7 @@ OPERATORS_MAP = {
 
 
 def eval_node(ast_node: Union[ast.Constant, ast.Name, ast.BinOp, ast.UnaryOp]) -> Node:
-    """Evaluate and dispatch to one of eval method depending on the type of ast_node"""
+    """Evaluate and dispatch to one of eval method depending on the section_type of ast_node"""
     log = logger.bind(func="eval node")
     log.debug(ast_node)
     func = AST_EVALUATORS[type(ast_node)]

@@ -10,7 +10,7 @@ RESERVED_NAME = {"pi": math.pi}
 
 
 class NodeType(str, Enum):
-    """Convenience enumeration of node type"""
+    """Convenience enumeration of node section_type"""
 
     Unary = "unary"
     Binary = "binary"

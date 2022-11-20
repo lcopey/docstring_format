@@ -31,7 +31,7 @@ class Node:
     @classmethod
     def from_dict(cls, datas: dict):
         """Instantiate the tree structure from existing serialized Tree as dictionary"""
-        node_type = datas.pop("type")
+        node_type = datas.pop("section_type")
         node_class = NODES_DEFINITION[node_type]
         return node_class(**datas)
 
@@ -54,7 +54,7 @@ class UnaryNode(Node):
         """Serialize to Ordered dict"""
         return OrderedDict(
             [
-                ("type", NodeType.Unary),
+                ("section_type", NodeType.Unary),
                 ("value", self.value.serialize()),
                 ("func_type", self.func_type),
             ]
@@ -90,7 +90,7 @@ class BinaryNode(Node):
     def serialize(self) -> OrderedDict:
         return OrderedDict(
             [
-                ("type", NodeType.Binary),
+                ("section_type", NodeType.Binary),
                 ("left", self.left.serialize()),
                 ("right", self.right.serialize()),
                 ("func_type", self.func_type),
@@ -132,7 +132,7 @@ class ConstantNode(TerminalNode):
 
     def serialize(self) -> OrderedDict:
         """Serialize as OrderedDict"""
-        return OrderedDict([("type", NodeType.Constant), ("value", self.value)])
+        return OrderedDict([("section_type", NodeType.Constant), ("value", self.value)])
 
 
 class VariableNode(TerminalNode):
@@ -144,7 +144,7 @@ class VariableNode(TerminalNode):
 
     def serialize(self) -> OrderedDict:
         """Serialize as OrderedDict"""
-        return OrderedDict([("type", NodeType.Variable), ("value", self.value)])
+        return OrderedDict([("section_type", NodeType.Variable), ("value", self.value)])
 
 
 NODES_DEFINITION = {
