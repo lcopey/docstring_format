@@ -12,15 +12,17 @@ def sanitize(lines: list[str]):
     """Remove docstring tags and empty lines at the beggining and the end of the docstring."""
 
     def remove_tags(line, tag):
+        """Remove docstring tags from the lines."""
         match = re.search(tag, line)
         if match:
             return ''.join(match.groups())
         return line
 
-    def pop_empty_lines(lines, index):
-        for _ in range(len(lines)):
-            if is_empty_line(lines[index]):
-                lines.pop(index)
+    def pop_empty_lines(lines_w_void: list[str], index):
+        """Remove empty lines."""
+        for _ in range(len(lines_w_void)):
+            if is_empty_line(lines_w_void[index]):
+                lines_w_void.pop(index)
             else:
                 break
 
@@ -35,37 +37,36 @@ def sanitize(lines: list[str]):
     return lines
 
 
-def apply_numpy_style(section: 'DocstringSection'):
+def apply_numpy_style(section: 'DocstringSection') -> list[str]:
     """Main entry point to annotate function.
 
     It maps the section section_type to the correct annotation function. Sections are cleaned in-situ, result is
     saved in the cleaned_lines attributes."""
-    section.cleaned_lines = sanitize(section.lines)
+    lines = sanitize(section.lines)
     if section.type in NUMPY_ANNOTATE_MAP.keys():
-        return NUMPY_ANNOTATE_MAP[section.type](section)
+        return NUMPY_ANNOTATE_MAP[section.type](section, lines)
 
 
-def clean_summary_section(section: 'DocstringSection'):
+def clean_summary_section(section: 'DocstringSection', lines: list[str]):
     """Adjust the summary section."""
     # remove consecutive blank lines
-    text = '\n'.join(section.cleaned_lines)
-    text = re.sub('\n{3,}', '\n\n', text)
+    text = '\n'.join(lines)
+    text = re.sub(r'\n{3,}', '\n\n', text)
     lines = [section.offset + line for line in text.splitlines()]
-    section.cleaned_lines = lines
+    return lines
 
 
-def clean_parameter_section(section: 'DocstringSection'):
+def clean_parameter_section(section: 'DocstringSection', lines: list[str]):
     """Clean parameter section."""
     offset = section.offset
     lines = ['', offset + 'Parameters', offset + '----------']
-    section.cleaned_lines = lines
+    return lines
 
 
-def clean_argument_section(section: 'DocstringSection'):
+def clean_argument_section(section: 'DocstringSection', lines: list[str]):
     """Clean parameter section"""
     offset = section.offset
     # correct indentation
-    lines = section.cleaned_lines
     annotated_argument = offset + f'{section.name} : {section.annotation}'
 
     if section.annotation:
@@ -73,12 +74,12 @@ def clean_argument_section(section: 'DocstringSection'):
         line = lines.pop(0)
         # check for description on the same line that the parameter name
         description = None
-        pattern = re.compile(f'{section.name}.*{section.annotation}[():\s_]*(.*)')
+        pattern = re.compile(rf'{section.name}.*{section.annotation}[():\s_]*(.*)')
         match = re.search(pattern, line)
         if match:
             description = match.groups()[0]
         else:
-            pattern = re.compile(f'{section.name}[():\s_]*(.*)')
+            pattern = re.compile(rf'{section.name}[():\s_]*(.*)')
             match = re.search(pattern, line)
             if match:
                 description = match.groups()[0]
@@ -92,12 +93,11 @@ def clean_argument_section(section: 'DocstringSection'):
     else:
         lines = [offset * min(2, n + 1) + line for n, line in enumerate(lines)]
 
-    section.cleaned_lines = lines
+    return lines
 
 
-def clean_return_section(section: 'DocstringSection'):
+def clean_return_section(section: 'DocstringSection', lines: list[str]):
     """Clean the return section."""
-    lines = section.cleaned_lines
     offset = section.offset
 
     # remove first line delimiters
@@ -116,10 +116,12 @@ def clean_return_section(section: 'DocstringSection'):
             lines.insert(0, offset + section.annotation)
 
     # add return delimiter
-    lines = ['', offset + 'Returns', offset + '-------',
+    lines = ['',
+             offset + 'Returns',
+             offset + '-------',
              *lines]
 
-    section.cleaned_lines = lines
+    return lines
 
 
 NUMPY_ANNOTATE_MAP = {SectionType.SUMMARY: clean_summary_section,

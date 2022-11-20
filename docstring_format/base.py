@@ -1,3 +1,4 @@
+"""Implements base objects for docstring cleaning."""
 import ast
 import re
 from dataclasses import dataclass, field
@@ -11,6 +12,7 @@ from .utils import DELIMITERS, DocstringStyle, SectionType, DOCSTRING_TAGS
 
 @dataclass
 class DocstringSection:
+    """Implements docstring section"""
     name: str
     type: SectionType
     start: Optional[int] = None
@@ -18,14 +20,16 @@ class DocstringSection:
     offset: Optional[str] = None
     lines: Optional[list[str]] = None
     annotation: Optional[str] = None
-    cleaned_lines: list[str] = None
 
-    def clean(self):
-        apply_numpy_style(self)
+    @property
+    def cleaned(self):
+        """Returns cleaned section."""
+        return apply_numpy_style(self)
 
 
 @dataclass
 class Docstring:
+    """Docstring base structure."""
     function: ast.FunctionDef
     lines: list[str]
     start: int
@@ -35,22 +39,27 @@ class Docstring:
 
     @classmethod
     def from_ast(cls, func: ast.FunctionDef, raw_text: list[str]):
+        """Parse ast tree structure."""
         start, length = get_docstring_start_and_length(func, raw_text)
         docstring_lines = raw_text[start:start + length]
         return cls(func, docstring_lines, start, length)
 
     def __post_init__(self):
-        self.offset = re.search('(\s*)', self.lines[0]).group()
+        self.offset = re.search(r'(\s*)', self.lines[0]).group()
         self.sections = parse_sections(self.function, self.lines)
 
-    def clean(self):
-        for section in self.sections:
-            section.clean()
-        lines = [line for section in self.sections for line in section.cleaned_lines]
+    @property
+    def cleaned(self):
+        """Apply cleaning functions."""
+        # for section in self.sections:
+        #     section.clean()
+        lines = [line for section in self.sections for line in section.cleaned]
         return [self.offset + '"""', *lines, '', self.offset + '"""']
 
 
 class ScriptFile:
+    """Base structure handling all functions found in a script file."""
+
     def __init__(self, file_path):
         self.file_path = file_path
         file = Path(file_path)
@@ -69,11 +78,13 @@ class ScriptFile:
         functions.extend(class_methods)
         return functions
 
-    def clean(self):
+    @property
+    def cleaned(self):
+        """Clean all docstring function found in script"""
         cleaned = self.lines.copy()
         offset = 0
         for docstring in self.docstrings:
-            new_docstring = docstring.clean()
+            new_docstring = docstring.cleaned
             new_length = len(new_docstring)
             for _ in range(docstring.length):
                 cleaned.pop(docstring.start + offset)
@@ -84,8 +95,9 @@ class ScriptFile:
         return cleaned
 
     def write_clean(self):
-        new_text = '\n'.join(self.clean())
-        new_file_path = Path(re.sub('\.py$', '_edit.py', self.file_path))
+        """Write in edit file"""
+        new_text = '\n'.join(self.cleaned)
+        new_file_path = Path(re.sub(r'\.py$', '_edit.py', self.file_path))
         new_file_path.write_text(new_text)
 
 
@@ -114,7 +126,8 @@ def get_docstring_start_and_length(func: ast.FunctionDef, raw_text: list[str]) -
 
 
 def detect_section(token_name: str, raw_text: list[str], section_type: SectionType) -> Optional[DocstringSection]:
-    pattern = re.compile(f'^(\s*)({token_name})')
+    """Generic method to detect a DocstringSection in the docstring."""
+    pattern = re.compile(rf'^(\s*)({token_name})')
     for n, line in enumerate(raw_text):
         match = re.search(pattern, line)
         if match:
@@ -127,17 +140,20 @@ def detect_section(token_name: str, raw_text: list[str], section_type: SectionTy
 
 
 def detect_summary_section(raw_text: list[str]) -> DocstringSection:
-    match = re.search(f'^(\s*)', raw_text[0])  # match whitespace
+    """Detect the Summary section."""
+    match = re.search(rf'^(\s*)', raw_text[0])  # match whitespace
     offset = match.group() if match else None
     return DocstringSection(name='Summary', type=SectionType.SUMMARY, start=0, offset=offset)
 
 
 def detect_param_delimiter_section(raw_text: list[str]):
+    """Detect the parameters section."""
     delimiter = DELIMITERS[DocstringStyle.NUMPY]['param']
     return detect_section(delimiter, raw_text, SectionType.PARAMETER_DELIMITER)
 
 
 def detect_return_section(function: ast.FunctionDef, raw_text: list[str]) -> Optional[DocstringSection]:
+    """Detect the returns section."""
     delimiter = DELIMITERS[DocstringStyle.NUMPY]['returns']
     section = detect_section(delimiter, raw_text, SectionType.RETURNS)
     if section is not None:
@@ -146,6 +162,7 @@ def detect_return_section(function: ast.FunctionDef, raw_text: list[str]) -> Opt
 
 
 def detect_argument_section(item: ast.arg, raw_text: list[str]) -> Optional[DocstringSection]:
+    """"Detect the argument section."""
     token_name = item.arg
     section = detect_section(token_name, raw_text, SectionType.ARG)
     if section is not None:
