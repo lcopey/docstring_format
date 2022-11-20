@@ -1,2 +1,3 @@
-from .annotations import parse_annotation, parse_returns
-from .base import annotate_function, get_docstring
+from .base import Docstring, Section
+from .constants import DocstringStyle, SectionType
+from .parser import parse_annotation, parse_returns

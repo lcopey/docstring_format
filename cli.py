@@ -4,8 +4,8 @@ from pathlib import Path
 
 from typer import Typer
 
-from docstring_format.base import (annotate_function, get_docstring_lines,
-                                   get_docstring_sections)
+from docstring_format.base import (annotate_function, get_docstring_sections,
+                                   get_docstring_start_and_length)
 
 app = Typer()
 
@@ -25,7 +25,7 @@ def generate_functions_tests():
 
     results = {}
     for func in functions:
-        start, length = get_docstring_lines(func, dirty_lines)
+        start, length = get_docstring_start_and_length(func, dirty_lines)
         results[func.name] = dict(zip(('start', 'length'), (start, length)))
 
         docstring = '\n'.join(dirty_lines[start:start + length])

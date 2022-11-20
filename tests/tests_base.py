@@ -4,7 +4,8 @@ from pathlib import Path
 from unittest import TestCase
 
 from docstring_format.base import (annotate_function, get_docstring,
-                                   get_docstring_lines, get_docstring_sections)
+                                   get_docstring_sections,
+                                   get_docstring_start_and_length)
 
 
 class TestFunctions(TestCase):
@@ -20,7 +21,7 @@ class TestFunctions(TestCase):
     def test_docstring_start_and_length(self):
         for func in self.functions:
             result = self.results[func.name]  # may fail if json file is not up to date
-            start, length = get_docstring_lines(func, self.dirty_lines)
+            start, length = get_docstring_start_and_length(func, self.dirty_lines)
             self.assertEqual(start, result['start'])
             self.assertEqual(length, result['length'])
 
