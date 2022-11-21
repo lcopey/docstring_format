@@ -51,32 +51,36 @@ class Docstring:
     @property
     def cleaned(self):
         """Apply cleaning functions."""
-        # for section in self.sections:
-        #     section.clean()
         lines = [line for section in self.sections for line in section.cleaned]
         return [self.offset + '"""', *lines, '', self.offset + '"""']
+
+
+def get_functions(raw_text: str):
+    """Finds the functions in the script file provided as o long str."""
+    # TODO walk the nodes ?
+    tree = ast.parse(raw_text)
+
+    functions = [item for item in tree.body if isinstance(item, ast.FunctionDef)]
+    classes = [item for item in tree.body if isinstance(item, ast.ClassDef)]
+    class_methods = [func for item in classes for func in item.body if isinstance(func, ast.FunctionDef)]
+    functions.extend(class_methods)
+    return functions
 
 
 class ScriptFile:
     """Base structure handling all functions found in a script file."""
 
-    def __init__(self, file_path):
+    def __init__(self, file_path: str):
+        """ScriptFile are usually initiated from python file."""
+
         self.file_path = file_path
         file = Path(file_path)
+        assert file_path.endswith('.py'), f'{file.name} is not a python script'
+
         raw_text = file.read_text()
-        functions = self.get_functions(raw_text)
+        functions = get_functions(raw_text)
         self.lines = raw_text.splitlines()
         self.docstrings = [Docstring.from_ast(func, self.lines) for func in functions]
-
-    def get_functions(self, raw_text: str):
-        # TODO walk the nodes ?
-        tree = ast.parse(raw_text)
-
-        functions = [item for item in tree.body if isinstance(item, ast.FunctionDef)]
-        classes = [item for item in tree.body if isinstance(item, ast.ClassDef)]
-        class_methods = [func for item in classes for func in item.body if isinstance(func, ast.FunctionDef)]
-        functions.extend(class_methods)
-        return functions
 
     @property
     def cleaned(self):

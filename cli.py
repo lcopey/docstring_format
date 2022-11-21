@@ -1,40 +1,45 @@
-import ast
 import json
 from pathlib import Path
+from dataclasses import asdict
 
 from typer import Typer
-
-from docstring_format.base import (annotate_function, get_docstring_sections,
-                                   get_docstring_start_and_length)
+from docstring_format.base import get_functions, parse_sections, Docstring, ScriptFile
 
 app = Typer()
 
 
 @app.command()
 def generate_functions_tests():
-    file = Path('./tests/dummy_tests_functions.py')
-
+    file_path = './tests/dummy_tests_functions.py'
+    file = Path(file_path)
     raw_text = file.read_text()
-    dirty_lines = raw_text.splitlines()
-    tree = ast.parse(raw_text)
-
-    # classes = [item for item in tree.body if isinstance(item, ast.ClassDef)]
-    # class_methods = [func for item in classes for func in item.body if isinstance(func, ast.FunctionDef)]
-
-    functions = [item for item in tree.body if isinstance(item, ast.FunctionDef)]
+    lines = raw_text.splitlines()
 
     results = {}
-    for func in functions:
-        start, length = get_docstring_start_and_length(func, dirty_lines)
-        results[func.name] = dict(zip(('start', 'length'), (start, length)))
 
-        docstring = '\n'.join(dirty_lines[start:start + length])
-        results[func.name]['sections'] = get_docstring_sections(docstring).to_dict()
+    functions = get_functions(raw_text)
+    results['get_functions'] = [func.name for func in functions]
 
-        results[func.name]['docstring'] = annotate_function(func, dirty_lines)
+    docstrings = [Docstring.from_ast(func, lines) for func in functions]
+    results['get_docstring_start_and_length'] = [(docstring.start, docstring.length)
+                                                 for docstring in docstrings]
+
+    sections = [parse_sections(func, lines) for func in functions]
+    results['parse_sections'] = [asdict(section) for item in sections for section in item]
+
+    # remove function attribute from test
+    results['docstrings'] = [{k: v for k, v in asdict(docstring).items() if k != 'function'}
+                             for docstring in docstrings]
+
+    results['sections_cleaned'] = [section.cleaned for item in sections for section in item]
+
+    results['docstrings_cleaned'] = [docstring.cleaned for docstring in docstrings]
+
+    script = ScriptFile(file_path)
+    results['script_cleaned'] = script.cleaned
 
     with open('./tests/dummy_test_functions_results.json', mode='w') as f:
-        json.dump(results, f, indent=4)
+        json.dump(results, f, indent=4, default=str)
 
 
 if __name__ == '__main__':
