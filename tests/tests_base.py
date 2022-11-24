@@ -1,11 +1,12 @@
 """Test module"""
 import json
+from dataclasses import asdict
 from pathlib import Path
 from unittest import TestCase
-from dataclasses import asdict
 
-from docstring_format import ScriptFile, Docstring, SectionType
-from docstring_format.base import get_functions, get_docstring_start_and_length, parse_sections
+from docstring_format import Docstring, ScriptFile, SectionType
+from docstring_format.base import (get_docstring_start_and_length,
+                                   get_functions, parse_sections)
 
 
 def load_test_results():

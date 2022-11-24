@@ -1,9 +1,11 @@
 import json
-from pathlib import Path
 from dataclasses import asdict
+from pathlib import Path
 
 from typer import Typer
-from docstring_format.base import get_functions, parse_sections, Docstring, ScriptFile
+
+from docstring_format.base import (Docstring, ScriptFile, get_functions,
+                                   parse_sections)
 
 app = Typer()
 

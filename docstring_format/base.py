@@ -7,7 +7,7 @@ from typing import Optional
 
 from .annotation_parser import parse_annotation, parse_returns
 from .numpy_style import apply_numpy_style
-from .utils import DELIMITERS, DocstringStyle, SectionType, DOCSTRING_TAGS
+from .utils import DELIMITERS, DOCSTRING_TAGS, DocstringStyle, SectionType
 
 
 @dataclass

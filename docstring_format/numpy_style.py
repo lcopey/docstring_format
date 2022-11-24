@@ -2,7 +2,7 @@
 import re
 from typing import TYPE_CHECKING
 
-from .utils import SectionType, is_empty_line, DOCSTRING_TAGS
+from .utils import DOCSTRING_TAGS, SectionType, is_empty_line
 
 if TYPE_CHECKING:
     from .base import DocstringSection

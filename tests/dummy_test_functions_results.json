@@ -9,27 +9,27 @@
     ],
     "get_docstring_start_and_length": [
         [
-            4,
+            5,
             11
         ],
         [
-            19,
+            20,
             11
         ],
         [
-            34,
+            35,
             10
         ],
         [
-            48,
+            49,
             10
         ],
         [
-            64,
+            65,
             10
         ],
         [
-            82,
+            83,
             12
         ]
     ],
@@ -38,10 +38,11 @@
             "name": "Summary",
             "type": "SectionType.SUMMARY",
             "start": 0,
-            "length": 7,
+            "length": 8,
             "offset": "",
             "lines": [
-                "from typing import Iterable, Optional",
+                "from typing import Iterable, Optional, Union",
+                "import pandas as pd",
                 "",
                 "",
                 "def function1(arg1: str):",
@@ -54,7 +55,7 @@
         {
             "name": "Parameters",
             "type": "SectionType.PARAMETER_DELIMITER",
-            "start": 7,
+            "start": 8,
             "length": 2,
             "offset": "    ",
             "lines": [
@@ -66,7 +67,7 @@
         {
             "name": "arg1",
             "type": "SectionType.ARG",
-            "start": 9,
+            "start": 10,
             "length": 2,
             "offset": "    ",
             "lines": [
@@ -78,7 +79,7 @@
         {
             "name": "Returns",
             "type": "SectionType.RETURNS",
-            "start": 11,
+            "start": 12,
             "length": 86,
             "offset": "    ",
             "lines": [
@@ -151,8 +152,8 @@
                 "",
                 "",
                 "def delta_w_returns(",
-                "        values: \"Union[pd.DataFrame, pd.Series]\", ref_id",
-                ") -> \"Union[pd.DataFrame, pd.Series]\":",
+                "        values: Union[pd.DataFrame, pd.Series], ref_id",
+                ") -> Union[pd.DataFrame, pd.Series]:",
                 "    \"\"\"Compute the difference of values with respect to ref_id.",
                 "",
                 "    Parameters",
@@ -175,10 +176,11 @@
             "name": "Summary",
             "type": "SectionType.SUMMARY",
             "start": 0,
-            "length": 7,
+            "length": 8,
             "offset": "",
             "lines": [
-                "from typing import Iterable, Optional",
+                "from typing import Iterable, Optional, Union",
+                "import pandas as pd",
                 "",
                 "",
                 "def function1(arg1: str):",
@@ -191,7 +193,7 @@
         {
             "name": "Parameters",
             "type": "SectionType.PARAMETER_DELIMITER",
-            "start": 7,
+            "start": 8,
             "length": 2,
             "offset": "    ",
             "lines": [
@@ -203,7 +205,7 @@
         {
             "name": "arg1",
             "type": "SectionType.ARG",
-            "start": 9,
+            "start": 10,
             "length": 2,
             "offset": "    ",
             "lines": [
@@ -215,7 +217,7 @@
         {
             "name": "Returns",
             "type": "SectionType.RETURNS",
-            "start": 11,
+            "start": 12,
             "length": 86,
             "offset": "    ",
             "lines": [
@@ -288,8 +290,8 @@
                 "",
                 "",
                 "def delta_w_returns(",
-                "        values: \"Union[pd.DataFrame, pd.Series]\", ref_id",
-                ") -> \"Union[pd.DataFrame, pd.Series]\":",
+                "        values: Union[pd.DataFrame, pd.Series], ref_id",
+                ") -> Union[pd.DataFrame, pd.Series]:",
                 "    \"\"\"Compute the difference of values with respect to ref_id.",
                 "",
                 "    Parameters",
@@ -312,10 +314,11 @@
             "name": "Summary",
             "type": "SectionType.SUMMARY",
             "start": 0,
-            "length": 7,
+            "length": 8,
             "offset": "",
             "lines": [
-                "from typing import Iterable, Optional",
+                "from typing import Iterable, Optional, Union",
+                "import pandas as pd",
                 "",
                 "",
                 "def function1(arg1: str):",
@@ -328,7 +331,7 @@
         {
             "name": "Parameters",
             "type": "SectionType.PARAMETER_DELIMITER",
-            "start": 7,
+            "start": 8,
             "length": 2,
             "offset": "    ",
             "lines": [
@@ -340,7 +343,7 @@
         {
             "name": "arg1",
             "type": "SectionType.ARG",
-            "start": 9,
+            "start": 10,
             "length": 2,
             "offset": "    ",
             "lines": [
@@ -352,7 +355,7 @@
         {
             "name": "Returns",
             "type": "SectionType.RETURNS",
-            "start": 11,
+            "start": 12,
             "length": 86,
             "offset": "    ",
             "lines": [
@@ -425,8 +428,8 @@
                 "",
                 "",
                 "def delta_w_returns(",
-                "        values: \"Union[pd.DataFrame, pd.Series]\", ref_id",
-                ") -> \"Union[pd.DataFrame, pd.Series]\":",
+                "        values: Union[pd.DataFrame, pd.Series], ref_id",
+                ") -> Union[pd.DataFrame, pd.Series]:",
                 "    \"\"\"Compute the difference of values with respect to ref_id.",
                 "",
                 "    Parameters",
@@ -449,10 +452,11 @@
             "name": "Summary",
             "type": "SectionType.SUMMARY",
             "start": 0,
-            "length": 7,
+            "length": 8,
             "offset": "",
             "lines": [
-                "from typing import Iterable, Optional",
+                "from typing import Iterable, Optional, Union",
+                "import pandas as pd",
                 "",
                 "",
                 "def function1(arg1: str):",
@@ -465,7 +469,7 @@
         {
             "name": "Parameters",
             "type": "SectionType.PARAMETER_DELIMITER",
-            "start": 7,
+            "start": 8,
             "length": 2,
             "offset": "    ",
             "lines": [
@@ -477,7 +481,7 @@
         {
             "name": "arg1",
             "type": "SectionType.ARG",
-            "start": 9,
+            "start": 10,
             "length": 2,
             "offset": "    ",
             "lines": [
@@ -489,7 +493,7 @@
         {
             "name": "Returns",
             "type": "SectionType.RETURNS",
-            "start": 11,
+            "start": 12,
             "length": 86,
             "offset": "    ",
             "lines": [
@@ -562,8 +566,8 @@
                 "",
                 "",
                 "def delta_w_returns(",
-                "        values: \"Union[pd.DataFrame, pd.Series]\", ref_id",
-                ") -> \"Union[pd.DataFrame, pd.Series]\":",
+                "        values: Union[pd.DataFrame, pd.Series], ref_id",
+                ") -> Union[pd.DataFrame, pd.Series]:",
                 "    \"\"\"Compute the difference of values with respect to ref_id.",
                 "",
                 "    Parameters",
@@ -586,10 +590,11 @@
             "name": "Summary",
             "type": "SectionType.SUMMARY",
             "start": 0,
-            "length": 7,
+            "length": 8,
             "offset": "",
             "lines": [
-                "from typing import Iterable, Optional",
+                "from typing import Iterable, Optional, Union",
+                "import pandas as pd",
                 "",
                 "",
                 "def function1(arg1: str):",
@@ -602,7 +607,7 @@
         {
             "name": "Parameters",
             "type": "SectionType.PARAMETER_DELIMITER",
-            "start": 7,
+            "start": 8,
             "length": 4,
             "offset": "    ",
             "lines": [
@@ -616,7 +621,7 @@
         {
             "name": "Returns",
             "type": "SectionType.RETURNS",
-            "start": 11,
+            "start": 12,
             "length": 51,
             "offset": "    ",
             "lines": [
@@ -677,7 +682,7 @@
         {
             "name": "values",
             "type": "SectionType.ARG",
-            "start": 62,
+            "start": 63,
             "length": 7,
             "offset": "        ",
             "lines": [
@@ -694,7 +699,7 @@
         {
             "name": "ref_id",
             "type": "SectionType.ARG",
-            "start": 69,
+            "start": 70,
             "length": 28,
             "offset": "    ",
             "lines": [
@@ -709,8 +714,8 @@
                 "",
                 "",
                 "def delta_w_returns(",
-                "        values: \"Union[pd.DataFrame, pd.Series]\", ref_id",
-                ") -> \"Union[pd.DataFrame, pd.Series]\":",
+                "        values: Union[pd.DataFrame, pd.Series], ref_id",
+                ") -> Union[pd.DataFrame, pd.Series]:",
                 "    \"\"\"Compute the difference of values with respect to ref_id.",
                 "",
                 "    Parameters",
@@ -733,10 +738,11 @@
             "name": "Summary",
             "type": "SectionType.SUMMARY",
             "start": 0,
-            "length": 7,
+            "length": 8,
             "offset": "",
             "lines": [
-                "from typing import Iterable, Optional",
+                "from typing import Iterable, Optional, Union",
+                "import pandas as pd",
                 "",
                 "",
                 "def function1(arg1: str):",
@@ -749,7 +755,7 @@
         {
             "name": "Parameters",
             "type": "SectionType.PARAMETER_DELIMITER",
-            "start": 7,
+            "start": 8,
             "length": 4,
             "offset": "    ",
             "lines": [
@@ -763,7 +769,7 @@
         {
             "name": "Returns",
             "type": "SectionType.RETURNS",
-            "start": 11,
+            "start": 12,
             "length": 51,
             "offset": "    ",
             "lines": [
@@ -824,7 +830,7 @@
         {
             "name": "values",
             "type": "SectionType.ARG",
-            "start": 62,
+            "start": 63,
             "length": 7,
             "offset": "        ",
             "lines": [
@@ -841,7 +847,7 @@
         {
             "name": "ref_id",
             "type": "SectionType.ARG",
-            "start": 69,
+            "start": 70,
             "length": 28,
             "offset": "    ",
             "lines": [
@@ -856,8 +862,8 @@
                 "",
                 "",
                 "def delta_w_returns(",
-                "        values: \"Union[pd.DataFrame, pd.Series]\", ref_id",
-                ") -> \"Union[pd.DataFrame, pd.Series]\":",
+                "        values: Union[pd.DataFrame, pd.Series], ref_id",
+                ") -> Union[pd.DataFrame, pd.Series]:",
                 "    \"\"\"Compute the difference of values with respect to ref_id.",
                 "",
                 "    Parameters",
@@ -892,7 +898,7 @@
                 "",
                 "    \"\"\""
             ],
-            "start": 4,
+            "start": 5,
             "length": 11,
             "offset": "    ",
             "sections": [
@@ -963,7 +969,7 @@
                 "",
                 "    \"\"\""
             ],
-            "start": 19,
+            "start": 20,
             "length": 11,
             "offset": "    ",
             "sections": [
@@ -1023,7 +1029,7 @@
                 "",
                 "    \"\"\""
             ],
-            "start": 34,
+            "start": 35,
             "length": 10,
             "offset": "    ",
             "sections": [
@@ -1092,7 +1098,7 @@
                 "",
                 "    \"\"\""
             ],
-            "start": 48,
+            "start": 49,
             "length": 10,
             "offset": "    ",
             "sections": [
@@ -1161,7 +1167,7 @@
                 "",
                 "    \"\"\""
             ],
-            "start": 64,
+            "start": 65,
             "length": 10,
             "offset": "    ",
             "sections": [
@@ -1232,7 +1238,7 @@
                 "",
                 "    \"\"\""
             ],
-            "start": 82,
+            "start": 83,
             "length": 12,
             "offset": "    ",
             "sections": [
@@ -1303,7 +1309,8 @@
     ],
     "sections_cleaned": [
         [
-            "from typing import Iterable, Optional",
+            "from typing import Iterable, Optional, Union",
+            "import pandas as pd",
             "",
             "def function1(arg1: str):",
             "\"\"\"",
@@ -1388,8 +1395,8 @@
             "        ",
             "        ",
             "        def delta_w_returns(",
-            "        values: \"Union[pd.DataFrame, pd.Series]\", ref_id",
-            "        ) -> \"Union[pd.DataFrame, pd.Series]\":",
+            "        values: Union[pd.DataFrame, pd.Series], ref_id",
+            "        ) -> Union[pd.DataFrame, pd.Series]:",
             "        \"\"\"Compute the difference of values with respect to ref_id.",
             "        ",
             "        Parameters",
@@ -1407,7 +1414,8 @@
             "        pass"
         ],
         [
-            "from typing import Iterable, Optional",
+            "from typing import Iterable, Optional, Union",
+            "import pandas as pd",
             "",
             "def function1(arg1: str):",
             "\"\"\"",
@@ -1492,8 +1500,8 @@
             "        ",
             "        ",
             "        def delta_w_returns(",
-            "        values: \"Union[pd.DataFrame, pd.Series]\", ref_id",
-            "        ) -> \"Union[pd.DataFrame, pd.Series]\":",
+            "        values: Union[pd.DataFrame, pd.Series], ref_id",
+            "        ) -> Union[pd.DataFrame, pd.Series]:",
             "        \"\"\"Compute the difference of values with respect to ref_id.",
             "        ",
             "        Parameters",
@@ -1511,7 +1519,8 @@
             "        pass"
         ],
         [
-            "from typing import Iterable, Optional",
+            "from typing import Iterable, Optional, Union",
+            "import pandas as pd",
             "",
             "def function1(arg1: str):",
             "\"\"\"",
@@ -1596,8 +1605,8 @@
             "        ",
             "        ",
             "        def delta_w_returns(",
-            "        values: \"Union[pd.DataFrame, pd.Series]\", ref_id",
-            "        ) -> \"Union[pd.DataFrame, pd.Series]\":",
+            "        values: Union[pd.DataFrame, pd.Series], ref_id",
+            "        ) -> Union[pd.DataFrame, pd.Series]:",
             "        \"\"\"Compute the difference of values with respect to ref_id.",
             "        ",
             "        Parameters",
@@ -1615,7 +1624,8 @@
             "        pass"
         ],
         [
-            "from typing import Iterable, Optional",
+            "from typing import Iterable, Optional, Union",
+            "import pandas as pd",
             "",
             "def function1(arg1: str):",
             "\"\"\"",
@@ -1700,8 +1710,8 @@
             "        ",
             "        ",
             "        def delta_w_returns(",
-            "        values: \"Union[pd.DataFrame, pd.Series]\", ref_id",
-            "        ) -> \"Union[pd.DataFrame, pd.Series]\":",
+            "        values: Union[pd.DataFrame, pd.Series], ref_id",
+            "        ) -> Union[pd.DataFrame, pd.Series]:",
             "        \"\"\"Compute the difference of values with respect to ref_id.",
             "        ",
             "        Parameters",
@@ -1719,7 +1729,8 @@
             "        pass"
         ],
         [
-            "from typing import Iterable, Optional",
+            "from typing import Iterable, Optional, Union",
+            "import pandas as pd",
             "",
             "def function1(arg1: str):",
             "\"\"\"",
@@ -1806,8 +1817,8 @@
             "        ",
             "        ",
             "        def delta_w_returns(",
-            "        values: \"Union[pd.DataFrame, pd.Series]\", ref_id",
-            "        ) -> \"Union[pd.DataFrame, pd.Series]\":",
+            "        values: Union[pd.DataFrame, pd.Series], ref_id",
+            "        ) -> Union[pd.DataFrame, pd.Series]:",
             "        \"\"\"Compute the difference of values with respect to ref_id.",
             "        ",
             "        Parameters",
@@ -1825,7 +1836,8 @@
             "        pass"
         ],
         [
-            "from typing import Iterable, Optional",
+            "from typing import Iterable, Optional, Union",
+            "import pandas as pd",
             "",
             "def function1(arg1: str):",
             "\"\"\"",
@@ -1912,8 +1924,8 @@
             "        ",
             "        ",
             "        def delta_w_returns(",
-            "        values: \"Union[pd.DataFrame, pd.Series]\", ref_id",
-            "        ) -> \"Union[pd.DataFrame, pd.Series]\":",
+            "        values: Union[pd.DataFrame, pd.Series], ref_id",
+            "        ) -> Union[pd.DataFrame, pd.Series]:",
             "        \"\"\"Compute the difference of values with respect to ref_id.",
             "        ",
             "        Parameters",
@@ -2021,7 +2033,8 @@
         ]
     ],
     "script_cleaned": [
-        "from typing import Iterable, Optional",
+        "from typing import Iterable, Optional, Union",
+        "import pandas as pd",
         "",
         "",
         "def function1(arg1: str):",
@@ -2109,8 +2122,8 @@
         "",
         "",
         "def delta_w_returns(",
-        "        values: \"Union[pd.DataFrame, pd.Series]\", ref_id",
-        ") -> \"Union[pd.DataFrame, pd.Series]\":",
+        "        values: Union[pd.DataFrame, pd.Series], ref_id",
+        ") -> Union[pd.DataFrame, pd.Series]:",
         "    \"\"\"",
         "    Compute the difference of values with respect to ref_id.",
         "",

@@ -1,4 +1,5 @@
-from typing import Iterable, Optional
+from typing import Iterable, Optional, Union
+import pandas as pd
 
 
 def function1(arg1: str):
@@ -78,8 +79,8 @@ def delta(
 
 
 def delta_w_returns(
-        values: "Union[pd.DataFrame, pd.Series]", ref_id
-) -> "Union[pd.DataFrame, pd.Series]":
+        values: Union[pd.DataFrame, pd.Series], ref_id
+) -> Union[pd.DataFrame, pd.Series]:
     """Compute the difference of values with respect to ref_id.
 
     Parameters
